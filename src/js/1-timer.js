@@ -1,15 +1,7 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
-
-const options = {
-  enableTime: true,
-  time_24hr: true,
-  defaultDate: new Date(),
-  minuteIncrement: 1,
-  onClose(selectedDates) {
-    console.log(selectedDates[0]);
-  },
-};
+import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
 
 function convertMs(ms) {
   // Number of milliseconds per unit of time
@@ -33,3 +25,71 @@ function convertMs(ms) {
 console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
 console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
 console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
+
+function addLeadingZero(value) {
+  return `0${value}`.slice(-2);
+}
+
+let userSelectedDate = null;
+let isTimerRunning = false;
+
+const datetimePicker = document.getElementById('datetime-picker');
+flatpickr(datetimePicker, {
+  enableTime: true,
+  time_24hr: true,
+  defaultDate: new Date(),
+  minuteIncrement: 1,
+  onClose(selectedDates) {
+    userSelectedDate = selectedDates[0];
+    if (selectedDate < new Date()) {
+      iziToast.warning({
+        title: 'Warning',
+        message: 'Please choose a date in the future',
+      });
+      document.querySelector('button[data-start]').disabled = true;
+    } else {
+      document.querySelector('button[data-start]').disabled = false;
+    }
+  },
+});
+
+document.querySelector('button[data-start]').addEventListener('click', () => {
+  if (!isTimerRunning) {
+    isTimerRunning = true;
+    document.querySelector('button[data-start]').disabled = true;
+    datetimePicker.disabled = true;
+
+    const remainingTime = convertMs(userSelectedDate - new Date());
+    const timerInterval = setInterval(() => {
+      const updatedRemainingTime = convertMs(userSelectedDate - new Date());
+
+      const days = updatedRemainingTime.days;
+      const hours = updatedRemainingTime.hours;
+      const minutes = updatedRemainingTime.minutes;
+      const seconds = updatedRemainingTime.seconds;
+
+      document.querySelector('.timer .field .value[data-days]').textContent =
+        addLeadingZero(days);
+      document.querySelector('.timer .field .value[data-hours]').textContent =
+        addLeadingZero(hours);
+      document.querySelector('.timer .field .value[data-minutes]').textContent =
+        addLeadingZero(minutes);
+      document.querySelector('.timer .field .value[data-seconds]').textContent =
+        addLeadingZero(seconds);
+
+      if (
+        updatedRemainingTime.days === 0 &&
+        updatedRemainingTime.hours === 0 &&
+        updatedRemainingTime.minutes === 0 &&
+        updatedRemainingTime.seconds === 0
+      ) {
+        clearInterval(timerInterval);
+        isTimerRunning = false;
+        iziToast.success({
+          title: 'Success',
+          message: 'Time is up!',
+        });
+      }
+    }, 1000);
+  }
+});
