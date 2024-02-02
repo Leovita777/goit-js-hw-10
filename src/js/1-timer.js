@@ -33,7 +33,12 @@ function addLeadingZero(value) {
 let userSelectedDate = null;
 let isTimerRunning = false;
 
+const startButton = document.querySelector('button[data-start]');
 const datetimePicker = document.getElementById('datetime-picker');
+// const timerFields = document.querySelectorAll('.timer .field');
+
+startButton.disabled = true;
+
 flatpickr(datetimePicker, {
   enableTime: true,
   time_24hr: true,
@@ -46,17 +51,17 @@ flatpickr(datetimePicker, {
         title: 'Warning',
         message: 'Please choose a date in the future',
       });
-      document.querySelector('button[data-start]').disabled = true;
+      startButton.disabled = true;
     } else {
-      document.querySelector('button[data-start]').disabled = false;
+      startButton.disabled = false;
     }
   },
 });
 
-document.querySelector('button[data-start]').addEventListener('click', () => {
+startButton.addEventListener('click', () => {
   if (!isTimerRunning) {
     isTimerRunning = true;
-    document.querySelector('button[data-start]').disabled = true;
+    startButton.disabled = true;
     datetimePicker.disabled = true;
 
     const remainingTime = convertMs(userSelectedDate - new Date());
