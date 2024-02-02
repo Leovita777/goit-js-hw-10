@@ -35,7 +35,6 @@ let isTimerRunning = false;
 
 const startButton = document.querySelector('button[data-start]');
 const datetimePicker = document.getElementById('datetime-picker');
-// const timerFields = document.querySelectorAll('.timer .field');
 
 startButton.disabled = true;
 
