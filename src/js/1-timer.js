@@ -9,7 +9,7 @@ const timerFields = document.querySelectorAll('.timer .field');
 
 startButton.disabled = true;
 
-datetimePicker.flatpickr({
+flatpickr(datetimePicker, {
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
