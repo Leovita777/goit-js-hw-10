@@ -3,6 +3,8 @@ import 'flatpickr/dist/flatpickr.min.css';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
+let isTimerRunning = false;
+
 const startButton = document.querySelector('button[data-start]');
 const datetimePicker = document.getElementById('datetime-picker');
 const timerFields = document.querySelectorAll('.timer .field');
@@ -15,7 +17,7 @@ flatpickr(datetimePicker, {
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    userSelectedDate = selectedDates[0];
+    const userSelectedDate = selectedDates[0];
     if (userSelectedDate < new Date()) {
       iziToast.warning({
         title: 'Warning',
