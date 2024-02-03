@@ -31,6 +31,8 @@ flatpickr(datetimePicker, {
 });
 
 startButton.addEventListener('click', () => {
+  const userSelectedDate = datetimePicker.value;
+
   if (!isTimerRunning) {
     isTimerRunning = true;
     startButton.disabled = true;
