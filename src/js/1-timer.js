@@ -4,10 +4,15 @@ import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
 let isTimerRunning = false;
+let userSelectedDate = null;
 
 const startButton = document.querySelector('button[data-start]');
 const datetimePicker = document.getElementById('datetime-picker');
 const timerFields = document.querySelectorAll('.timer .field');
+const fieldDays = document.querySelector('data-days');
+const fieldHours = document.querySelector('data-hours');
+const fieldMinutes = document.querySelector('data-minutes');
+const fieldSeconds = document.querySelector('data-seconds');
 
 startButton.disabled = true;
 
@@ -17,7 +22,7 @@ flatpickr(datetimePicker, {
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    const userSelectedDate = selectedDates[0];
+    userSelectedDate = selectedDates[0];
     if (userSelectedDate < new Date()) {
       iziToast.warning({
         title: 'Warning',
@@ -31,36 +36,18 @@ flatpickr(datetimePicker, {
 });
 
 startButton.addEventListener('click', () => {
-  const userSelectedDate = datetimePicker.value;
-
   if (!isTimerRunning) {
     isTimerRunning = true;
     startButton.disabled = true;
     datetimePicker.disabled = true;
 
-    const remainingTime = convertMs(userSelectedDate - new Date());
-
-    const timerInterval = setInterval(() => {
+    const { days, hours, minutes, seconds } = setInterval(() => {
       const updatedRemainingTime = convertMs(userSelectedDate - new Date());
 
-      const days = updatedRemainingTime.days;
-      const hours = updatedRemainingTime.hours;
-      const minutes = updatedRemainingTime.minutes;
-      const seconds = updatedRemainingTime.seconds;
-
-      for (const field of timerFields) {
-        const valueElement = field.querySelector('.value');
-        const dataAttribute = valueElement.dataset.days
-          ? `data-${valueElement.dataset.days}`
-          : `data-${valueElement.dataset.hours}`
-          ? `data-${valueElement.dataset.hours}`
-          : `data-${valueElement.dataset.minutes}`
-          ? `data-${valueElement.dataset.minutes}`
-          : `data-${valueElement.dataset.seconds}`;
-        valueElement.textContent = addLeadingZero(
-          updatedRemainingTime[dataAttribute]
-        );
-      }
+      fieldDays.textContent = addLeadingZero(days);
+      fieldHours.textContent = addLeadingZero(hours);
+      fieldMinutes.textContent = addLeadingZero(minutes);
+      fieldSeconds.textContent = addLeadingZero(seconds);
 
       if (
         updatedRemainingTime.days === 0 &&
