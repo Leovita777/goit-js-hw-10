@@ -41,8 +41,10 @@ startButton.addEventListener('click', () => {
     startButton.disabled = true;
     datetimePicker.disabled = true;
 
-    const { days, hours, minutes, seconds } = setInterval(() => {
-      const updatedRemainingTime = convertMs(userSelectedDate - new Date());
+    const timerInterval = setInterval(() => {
+      const { days, hours, minutes, seconds } = convertMs(
+        userSelectedDate - new Date()
+      );
 
       fieldDays.textContent = addLeadingZero(days);
       fieldHours.textContent = addLeadingZero(hours);
