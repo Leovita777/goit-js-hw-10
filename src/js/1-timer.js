@@ -9,10 +9,10 @@ let userSelectedDate = null;
 const startButton = document.querySelector('button[data-start]');
 const datetimePicker = document.getElementById('datetime-picker');
 const timerFields = document.querySelectorAll('.timer .field');
-const fieldDays = document.querySelector('data-days');
-const fieldHours = document.querySelector('data-hours');
-const fieldMinutes = document.querySelector('data-minutes');
-const fieldSeconds = document.querySelector('data-seconds');
+const fieldDays = document.querySelector('[data-days]');
+const fieldHours = document.querySelector('[data-hours]');
+const fieldMinutes = document.querySelector('[data-minutes]');
+const fieldSeconds = document.querySelector('[data-seconds]');
 
 startButton.disabled = true;
 
