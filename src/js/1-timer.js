@@ -51,12 +51,7 @@ startButton.addEventListener('click', () => {
       fieldMinutes.textContent = addLeadingZero(minutes);
       fieldSeconds.textContent = addLeadingZero(seconds);
 
-      if (
-        updatedRemainingTime.days === 0 &&
-        updatedRemainingTime.hours === 0 &&
-        updatedRemainingTime.minutes === 0 &&
-        updatedRemainingTime.seconds === 0
-      ) {
+      if (days === 0 && hours === 0 && minutes === 0 && seconds === 0) {
         clearInterval(timerInterval);
         isTimerRunning = false;
         iziToast.success({
